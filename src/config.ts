@@ -1,12 +1,5 @@
-/**
- * Application Configuration
- *
- * Environment variables are loaded from .env.local (local development)
- * Environment variables should be prefixed with VITE_ to be exposed
- */
-
 export const SPOONACULAR_CONFIG = {
-  apiKey: import.meta.env['VITE_SPOONACULAR_API_KEY'] || '',
+  apiKey: '7b18b9fccd214d91955546a2ea89f0d4',
   baseUrl: 'https://api.spoonacular.com/recipes'
 };
 
