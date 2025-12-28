@@ -45,5 +45,6 @@ Thumbs.db
 # Environment variables (local only, never commit)
 .env.local
 
-playwright-report
-test-results
+# Playwright E2E test artifacts
+/playwright-report
+/test-results
