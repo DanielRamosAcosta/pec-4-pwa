@@ -1,5 +1,5 @@
 # Deployment
 
-La aplicación PWA ha sido desplegada en GitHub Pages:
+La aplicación PWA ha sido desplegada en:
 
-**URL**: https://danielramosacosta.github.io/pec-4-pwa/
+**URL**: https://www.danielramos.me/pec-4-pwa/recipes
