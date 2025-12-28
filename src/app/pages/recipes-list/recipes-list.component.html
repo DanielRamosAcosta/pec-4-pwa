@@ -1,0 +1,62 @@
+<div class="recipes-list-container">
+  <mat-toolbar color="primary" class="toolbar">
+    <span class="title">Recipe Finder</span>
+    <span class="spacer"></span>
+
+    @if (!loading()) {
+      <div class="view-toggle">
+        <button
+          mat-icon-button
+          [color]="viewMode() === 'cards' ? 'accent' : 'basic'"
+          (click)="toggleView('cards')"
+          aria-label="Card view"
+        >
+          <mat-icon>grid_view</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          [color]="viewMode() === 'table' ? 'accent' : 'basic'"
+          (click)="toggleView('table')"
+          aria-label="Table view"
+        >
+          <mat-icon>table_rows</mat-icon>
+        </button>
+      </div>
+    }
+  </mat-toolbar>
+
+  <div class="content">
+    @if (loading()) {
+      <div class="loading-container">
+        <mat-spinner></mat-spinner>
+        <p>Loading delicious recipes...</p>
+      </div>
+    } @else if (error()) {
+      <div class="error-container">
+        <mat-icon color="warn">error</mat-icon>
+        <p>{{ error() }}</p>
+        <button mat-raised-button color="primary" (click)="retryLoadRecipes()">
+          Retry
+        </button>
+      </div>
+    } @else {
+      <div @listAnimation>
+        @if (viewMode() === 'cards') {
+          <div class="cards-grid">
+            @for (recipe of recipes(); track recipe.id) {
+              <app-recipe-card
+                [recipe]="recipe"
+                (cardClick)="navigateToDetail($event)"
+              />
+            }
+          </div>
+        } @else {
+          <app-recipe-grid
+            [recipes]="recipes()"
+            (rowClick)="navigateToDetail($event)"
+          />
+        }
+      </div>
+    }
+  </div>
+</div>

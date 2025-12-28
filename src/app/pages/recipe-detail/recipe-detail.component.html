@@ -1,0 +1,187 @@
+<div class="recipe-detail-container">
+  @if (loading()) {
+    <div class="loading-container">
+      <mat-spinner></mat-spinner>
+      <p>Loading recipe details...</p>
+    </div>
+  } @else if (error()) {
+    <div class="error-container">
+      <mat-icon color="warn">error</mat-icon>
+      <p>{{ error() }}</p>
+      <button mat-raised-button color="primary" (click)="goBack()">
+        Go Back
+      </button>
+    </div>
+  } @else if (recipe()) {
+    <mat-toolbar color="primary" class="toolbar">
+      <button mat-icon-button (click)="goBack()" aria-label="Go back">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <span class="title">{{ recipe()!.title }}</span>
+      <span class="spacer"></span>
+      <button
+        mat-raised-button
+        color="accent"
+        (click)="toggleDetails()"
+      >
+        {{ showAllDetails() ? 'Hide Details' : 'Show All Details' }}
+      </button>
+    </mat-toolbar>
+
+    <div class="content">
+      <div class="recipe-header">
+        <img
+          [src]="recipe()!.image"
+          [alt]="recipe()!.title"
+          class="recipe-image"
+        />
+
+        <div class="recipe-meta">
+          <div class="meta-item">
+            <mat-icon>schedule</mat-icon>
+            <span>{{ recipe()!.readyInMinutes }} minutes</span>
+          </div>
+          <div class="meta-item">
+            <mat-icon>restaurant</mat-icon>
+            <span>{{ recipe()!.servings }} servings</span>
+          </div>
+          <div class="meta-item">
+            <mat-icon>favorite</mat-icon>
+            <span>{{ recipe()!.aggregateLikes }} likes</span>
+          </div>
+          <div class="meta-item">
+            <mat-icon>star</mat-icon>
+            <span>Health Score: {{ recipe()!.healthScore }}</span>
+          </div>
+        </div>
+
+        <div class="recipe-tags">
+          @if (recipe()!.vegetarian) {
+            <mat-chip>Vegetarian</mat-chip>
+          }
+          @if (recipe()!.vegan) {
+            <mat-chip>Vegan</mat-chip>
+          }
+          @if (recipe()!.glutenFree) {
+            <mat-chip>Gluten Free</mat-chip>
+          }
+          @if (recipe()!.dairyFree) {
+            <mat-chip>Dairy Free</mat-chip>
+          }
+        </div>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      @if (showAllDetails()) {
+        <div class="details-expanded">
+          <mat-expansion-panel expanded>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <mat-icon>shopping_cart</mat-icon>
+                Ingredients
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <ul class="ingredients-list">
+              @for (ingredient of recipe()!.extendedIngredients; track ingredient.id) {
+                <li>
+                  <img
+                    [src]="'https://spoonacular.com/cdn/ingredients_100x100/' + ingredient.image"
+                    [alt]="ingredient.name"
+                    class="ingredient-image"
+                    loading="lazy"
+                  />
+                  <span>{{ ingredient.original }}</span>
+                </li>
+              }
+            </ul>
+          </mat-expansion-panel>
+
+          @if (recipe()!.analyzedInstructions && recipe()!.analyzedInstructions.length > 0) {
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <mat-icon>format_list_numbered</mat-icon>
+                  Instructions
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              @for (instruction of recipe()!.analyzedInstructions; track $index) {
+                <div class="instruction-group">
+                  @if (instruction.name) {
+                    <h3>{{ instruction.name }}</h3>
+                  }
+                  <ol class="steps-list">
+                    @for (step of instruction.steps; track step.number) {
+                      <li>{{ step.step }}</li>
+                    }
+                  </ol>
+                </div>
+              }
+            </mat-expansion-panel>
+          }
+
+          @if (recipe()!.nutrition) {
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <mat-icon>analytics</mat-icon>
+                  Nutrition Information
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="nutrition-grid">
+                @for (nutrient of recipe()!.nutrition!.nutrients.slice(0, 8); track nutrient.name) {
+                  <div class="nutrient-item">
+                    <strong>{{ nutrient.name }}</strong>
+                    <span>{{ nutrient.amount }} {{ nutrient.unit }}</span>
+                    <small>{{ nutrient.percentOfDailyNeeds }}% daily</small>
+                  </div>
+                }
+              </div>
+            </mat-expansion-panel>
+          }
+
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <mat-icon>info</mat-icon>
+                Additional Information
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="additional-info">
+              @if (recipe()!.cuisines && recipe()!.cuisines.length > 0) {
+                <div class="info-section">
+                  <strong>Cuisines:</strong>
+                  <div class="chip-list">
+                    @for (cuisine of recipe()!.cuisines; track cuisine) {
+                      <mat-chip>{{ cuisine }}</mat-chip>
+                    }
+                  </div>
+                </div>
+              }
+              @if (recipe()!.dishTypes && recipe()!.dishTypes.length > 0) {
+                <div class="info-section">
+                  <strong>Dish Types:</strong>
+                  <div class="chip-list">
+                    @for (type of recipe()!.dishTypes; track type) {
+                      <mat-chip>{{ type }}</mat-chip>
+                    }
+                  </div>
+                </div>
+              }
+              @if (recipe()!.diets && recipe()!.diets.length > 0) {
+                <div class="info-section">
+                  <strong>Diets:</strong>
+                  <div class="chip-list">
+                    @for (diet of recipe()!.diets; track diet) {
+                      <mat-chip>{{ diet }}</mat-chip>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          </mat-expansion-panel>
+        </div>
+      }
+    </div>
+  }
+</div>
