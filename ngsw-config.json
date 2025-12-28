@@ -8,7 +8,6 @@
       "resources": {
         "files": [
           "/favicon.ico",
-          "/index.csr.html",
           "/index.html",
           "/manifest.webmanifest",
           "/*.css",
@@ -24,6 +23,43 @@
         "files": [
           "/**/*.(svg|cur|jpg|jpeg|png|apng|webp|avif|gif|otf|ttf|woff|woff2)"
         ]
+      }
+    }
+  ],
+  "dataGroups": [
+    {
+      "name": "api-recipes",
+      "urls": [
+        "https://api.spoonacular.com/recipes/complexSearch**"
+      ],
+      "cacheConfig": {
+        "strategy": "freshness",
+        "maxSize": 50,
+        "maxAge": "1h",
+        "timeout": "5s"
+      }
+    },
+    {
+      "name": "api-recipe-details",
+      "urls": [
+        "https://api.spoonacular.com/recipes/*/information**"
+      ],
+      "cacheConfig": {
+        "strategy": "performance",
+        "maxSize": 100,
+        "maxAge": "1d"
+      }
+    },
+    {
+      "name": "recipe-images",
+      "urls": [
+        "https://spoonacular.com/recipeImages/**",
+        "https://spoonacular.com/cdn/ingredients_100x100/**"
+      ],
+      "cacheConfig": {
+        "strategy": "performance",
+        "maxSize": 200,
+        "maxAge": "7d"
       }
     }
   ]
